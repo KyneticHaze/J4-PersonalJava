@@ -96,7 +96,6 @@ public class PersonalRegister extends AppCompatActivity {
     }
 
 
-
     public void save(View view) {
         String name = binding.nameText.getText().toString();
         String lastName = binding.lastNameText.getText().toString();

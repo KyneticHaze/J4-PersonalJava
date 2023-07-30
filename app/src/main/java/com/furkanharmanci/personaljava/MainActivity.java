@@ -1,25 +1,21 @@
 package com.furkanharmanci.personaljava;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.app.Person;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.furkanharmanci.personaljava.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,25 +49,33 @@ public class MainActivity extends AppCompatActivity {
 
     //Data çağırma
     public void getData() {
-        SQLiteDatabase database = this.openOrCreateDatabase("personal", MODE_PRIVATE, null);
 
-        Cursor cursor = database.rawQuery("SELECT * FROM personal", null);
+        try {
+            SQLiteDatabase database = this.openOrCreateDatabase("personal", MODE_PRIVATE, null);
 
-        int personIx = cursor.getColumnIndex("personName");
-        int idIx = cursor.getColumnIndex("id");
+            Cursor cursor = database.rawQuery("SELECT * FROM personal", null);
 
-        while(cursor.moveToNext()) {
-            String name = cursor.getString(personIx);
-            int id = cursor.getInt(idIx);
+            int personIx = cursor.getColumnIndex("personName");
+            int idIx = cursor.getColumnIndex("id");
 
-            Personal personal = new Personal(name, id);
-            personalArrayList.add(personal);
+            while(cursor.moveToNext()) {
+                String name = cursor.getString(personIx);
+                int id = cursor.getInt(idIx);
+
+                Personal personal = new Personal(name, id);
+                personalArrayList.add(personal);
+            }
+
+            cursor.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // Veri setinin değiştiğini adapter'e bildirme
         personalAdapter.notifyDataSetChanged();
 
-        cursor.close();
+
     }
 
     // Menu oluşturma
